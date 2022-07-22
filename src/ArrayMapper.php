@@ -89,7 +89,7 @@ class ArrayMapper
     {
         if(
             is_array($source) && !array_key_exists($fieldName, $source)
-            || is_object($source) && !property_exists($source, $fieldName)
+            || is_object($source) && !isset($source->{$fieldName}) && !property_exists($source, $fieldName)
         ) {
             throw new ArrayMapperException(
                 "field '{$fieldName}' not exist",

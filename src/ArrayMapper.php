@@ -12,12 +12,13 @@ use Smoren\ExtendedExceptions\BaseException;
 class ArrayMapper
 {
     /**
-     * @param array $input
-     * @param array $mapFields
-     * @param bool $multiple
-     * @param bool $ignoreNulls
-     * @param callable|null $valueGetter
-     * @return array
+     * Maps array with map fields
+     * @param array[]|object[] $input array of arrays or objects you want to map
+     * @param array $mapFields fields for mapping (scalar or callable)
+     * @param bool $multiple support multiple results on mapping
+     * @param bool $ignoreNulls ignore items with nullable mapping fields values
+     * @param callable|null $valueGetter callable value getter
+     * @return array mapped array
      * @throws ArrayMapperException
      */
     public static function map(
@@ -31,15 +32,15 @@ class ArrayMapper
                 continue;
             }
             $resultPointer = &$result;
-            foreach($mapFields as $fieldName) {
-                $fieldValue = static::getFieldValue($item, $fieldName);
+            foreach($mapFields as $field) {
+                $fieldValue = static::getFieldValue($item, $field);
                 if(!is_scalar($fieldValue)) {
                     throw new ArrayMapperException(
-                        "field value of '{$fieldName}' is not scalar",
+                        "field value of '{$field}' is not scalar",
                         ArrayMapperException::STATUS_NON_SCALAR_FIELD_VALUE,
                         null,
                         [
-                            'fieldName' => $fieldName,
+                            'fieldName' => $field,
                             'fieldValue' => $fieldValue,
                             'source' => $item,
                         ]
@@ -63,6 +64,12 @@ class ArrayMapper
         return $result;
     }
 
+    /**
+     * Checks that field values are not null for source item
+     * @param array|object $source source item
+     * @param array $fieldNames field names
+     * @return bool
+     */
     protected static function isFieldsNotNull($source, array $fieldNames): bool
     {
         foreach($fieldNames as $fieldName) {
@@ -80,13 +87,18 @@ class ArrayMapper
     }
 
     /**
-     * @param $source
-     * @param $fieldName
-     * @return mixed
+     * Returns field value for source item and field name
+     * @param array|object $source source item
+     * @param scalar|callable $fieldName field name
+     * @return mixed field value
      * @throws ArrayMapperException
      */
     protected static function getFieldValue($source, $fieldName)
     {
+        if(is_callable($fieldName)) {
+            return $fieldName($source);
+        }
+
         if(
             is_array($source) && !array_key_exists($fieldName, $source)
             || is_object($source) && !isset($source->{$fieldName}) && !property_exists($source, $fieldName)

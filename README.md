@@ -1,5 +1,11 @@
 # array-mapper
 
+![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/smoren/array-mapper)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Smoren/array-mapper-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Smoren/array-mapper-php/?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/Smoren/array-mapper-php/badge.svg?branch=master)](https://coveralls.io/github/Smoren/array-mapper-php?branch=master)
+![Build and test](https://github.com/Smoren/array-mapper-php/actions/workflows/test_master.yml/badge.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Helper for mapping arrays
 
 ### How to install to your project

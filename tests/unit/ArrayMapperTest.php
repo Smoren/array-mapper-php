@@ -2,7 +2,6 @@
 
 namespace Smoren\ArrayMapper\Tests\Unit;
 
-
 use Smoren\ArrayMapper\ArrayMapper;
 use Smoren\ArrayMapper\ArrayMapperException;
 

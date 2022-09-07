@@ -2,8 +2,6 @@
 
 namespace Smoren\ArrayMapper;
 
-use phpDocumentor\Reflection\Types\Scalar;
-
 /**
  * Mapper helper
  */
@@ -92,7 +90,7 @@ class ArrayMapper
     /**
      * Returns field value for source item and field name
      * @param array<mixed>|object $source source item
-     * @param string|callable $fieldName field name
+     * @param scalar|callable $fieldName field name
      * @return mixed field value
      * @throws ArrayMapperException
      */
@@ -103,8 +101,8 @@ class ArrayMapper
         }
 
         if(
-            is_array($source) && !array_key_exists($fieldName, $source)
-            || is_object($source) && !isset($source->{$fieldName}) && !property_exists($source, $fieldName)
+            is_array($source) && !array_key_exists((string)$fieldName, $source)
+            || is_object($source) && !isset($source->{$fieldName}) && !property_exists($source, (string)$fieldName)
         ) {
             throw new ArrayMapperException(
                 "field '{$fieldName}' not exist",

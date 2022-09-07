@@ -175,4 +175,37 @@ class ArrayMapperTest extends \Codeception\Test\Unit
         $this->assertEquals(['Moscow-1' => 1, 'Moscow-2' => 2, 'Tomsk-3' => 3], $result['Russia']);
         $this->assertEquals(['Minsk-4' => 4], $result['Belarus']);
     }
+
+    public function testErrors()
+    {
+        $source = [
+            [
+                'id' => 1,
+                'country' => ['Country is not scalar'],
+                'city' => 'Moscow',
+            ],
+        ];
+
+        try {
+            ArrayMapper::map($source, ['country', 'city'], true, true, function($item) {
+                return $item->id;
+            });
+            $this->expectError();
+        } catch(ArrayMapperException $e) {
+            $this->assertEquals(ArrayMapperException::STATUS_NON_SCALAR_FIELD_VALUE, $e->getCode());
+        }
+
+        $source = [
+            123,
+        ];
+
+        try {
+            ArrayMapper::map($source, ['country', 'city'], true, false, function($item) {
+                return $item->id;
+            });
+            $this->expectError();
+        } catch(ArrayMapperException $e) {
+            $this->assertEquals(ArrayMapperException::STATUS_SCALAR_SOURCE_ITEM, $e->getCode());
+        }
+    }
 }
